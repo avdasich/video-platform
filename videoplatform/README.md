@@ -19,7 +19,7 @@
     - Уставнока PostgreSQL
       Перейдите на официальный сайт PostgreSQL - https://www.postgresql.org/download/
       Скачайте установщик для Windows/Mac
-      
+    - Установить Python - https://www.python.org/downloads/
     - Установите зависимости: pip install -r requirements.txt
     - Выполните миграции: python manage.py migrate
     - Запустите сервер: python manage.py runserver
