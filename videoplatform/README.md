@@ -14,18 +14,18 @@
  - База данных: SQLite (для разработки)
 
  
- ## Установка
+ # Установка
  1. Бэкенд:
     - Уставнока PostgreSQL
       Перейдите на официальный сайт PostgreSQL - https://www.postgresql.org/download/
       Скачайте установщик для Windows/Mac
     - Установить Python - https://www.python.org/downloads/
     - Открыть корневую папку videoplatform(где лежит файл requirements.txt)
-    - # Создаем виртуальное окружение
+    - ## Создаем виртуальное окружение
         python -m venv venv
-      # Активируем (Windows)
+      ## Активируем (Windows)
         venv\Scripts\activate
-      # Активируем (macOS)
+      ## Активируем (macOS)
         source venv/bin/activate
     - Установите зависимости: pip install -r requirements.txt
     - Выполните миграции: python manage.py migrate
@@ -37,11 +37,11 @@
     - Установите зависимости: npm install
     - Запустите приложение: npm start
  
- ## API
+ # API
  - GET /api/videos/ — список видео
  - POST /api/videos/upload/ — загрузка видео
  - PUT /api/videos/<id>/edit/ — редактирование видео
  - DELETE /api/videos/<id>/delete/ — удаление видео
  
- ## Документация
+ # Документация
  - [API Документация](docs/API.md)
