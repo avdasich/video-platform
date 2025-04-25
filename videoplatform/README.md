@@ -20,11 +20,19 @@
       Перейдите на официальный сайт PostgreSQL - https://www.postgresql.org/download/
       Скачайте установщик для Windows/Mac
     - Установить Python - https://www.python.org/downloads/
+    - Открыть корневую папку videoplatform(где лежит файл requirements.txt)
+    - # Создаем виртуальное окружение
+        python -m venv venv
+      # Активируем (Windows)
+        venv\Scripts\activate
+      # Активируем (macOS)
+        source venv/bin/activate
     - Установите зависимости: pip install -r requirements.txt
     - Выполните миграции: python manage.py migrate
     - Запустите сервер: python manage.py runserver
  
  3. Фронтенд:
+    - Открыть во втором окне терминала корневую папку проекта (videoplatfom)
     - Перейдите в папку фронтенда: cd frontend
     - Установите зависимости: npm install
     - Запустите приложение: npm start
