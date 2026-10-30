@@ -1,3 +1,9 @@
-from django.test import TestCase
+from rest_framework.test import APITestCase
 
-# Create your tests here.
+
+class VideoPermissionsTests(APITestCase):
+    def test_upload_requires_login(self):
+        response = self.client.post('/api/videos/upload/', {
+            'title': 'Test video',
+        }, format='multipart')
+        self.assertEqual(response.status_code, 401)

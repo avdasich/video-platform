@@ -9,6 +9,12 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['email', 'password', 'username']
+        extra_kwargs = {
+            'password': {
+                'write_only': True,
+                'validators': [validate_password],
+            }
+        }
     
     def validate_email(self, value):
         if CustomUser.objects.filter(email=value).exists():

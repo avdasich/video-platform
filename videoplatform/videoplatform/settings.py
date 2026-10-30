@@ -1,32 +1,36 @@
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 from datetime import timedelta
 
 import mimetypes
 mimetypes.add_type("video/mp4", ".mp4", True)
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 FILE_UPLOAD_PERMISSIONS = 0o644
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-q4zi8c$qqc=6-1+m=+whn7_s88&v9-_%576*a60!o-aerr7^b('
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
-# Application definition
+
+
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
+
+
+DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
+
+ALLOWED_HOSTS = [host.strip() for host in os.getenv(
+    "DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1"
+).split(",") if host.strip()]
+
+
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -47,8 +51,8 @@ INSTALLED_APPS = [
 
 
 SIMPLE_JWT = {
-   'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Пример срока действия access токена
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # Пример срока действия refresh токена
+   'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
@@ -99,24 +103,23 @@ TEMPLATES = [
 WSGI_APPLICATION = 'videoplatform.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+
+
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'videoplatform_db',
-        'USER': 'm1',           # ваш macOS‑пользователь
-        'PASSWORD': '0056',     # его пароль в Postgres
-        'HOST': 'localhost',
-        'PORT': '5432',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("POSTGRES_DB", "videoplatform_db"),
+        "USER": os.environ["POSTGRES_USER"],
+        "PASSWORD": os.environ["POSTGRES_PASSWORD"],
+        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+        "PORT": os.getenv("POSTGRES_PORT", "5432"),
     }
 }
 
 
 
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -134,8 +137,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
+
+
 
 LANGUAGE_CODE = 'en-us'
 
@@ -146,24 +149,24 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
+
+
 
 STATIC_URL = 'static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# внизу файла
 
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',  # Адрес вашего React-приложения
-]
 
-DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100MB
-CORS_ALLOW_ALL_ORIGINS = True  # Для разработки
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [origin.strip() for origin in os.getenv(
+    "CORS_ALLOWED_ORIGINS", "http://localhost:3000"
+).split(",") if origin.strip()]
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_CREDENTIALS = False

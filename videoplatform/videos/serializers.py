@@ -23,16 +23,15 @@ class VideoSerializer(serializers.ModelSerializer):
         return request and request.user == obj.user
 
     def update(self, instance, validated_data):
-        # Логируем данные, которые приходят
-        print(f"Обновление видео {instance.id}: validated_data={validated_data}")
-        new_file = validated_data.get('file')
-        if new_file and instance.file:
-            instance.file.delete()
-        return super().update(instance, validated_data)
+        previous_file = instance.file if 'file' in validated_data else None
+        instance = super().update(instance, validated_data)
+        if previous_file and previous_file.name != instance.file.name:
+            previous_file.delete(save=False)
+        return instance
 
     def validate(self, data):
-        # Логируем ошибки валидации
-        print(f"Валидация данных: {data}")
+        if self.instance is None and not data.get('file'):
+            raise serializers.ValidationError({'file': 'Выбери видеофайл.'})
         return data
 
 class CommentSerializer(serializers.ModelSerializer):

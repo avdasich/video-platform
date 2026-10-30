@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-# Create your views here.
+
 from .serializers import RegisterSerializer
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view, permission_classes
@@ -22,8 +22,8 @@ class RegisterView(APIView):
             user = serializer.save()
             return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
         
-        # Логируем ошибки, если данные некорректны
-        print(serializer.errors)  # Здесь будут выводиться ошибки
+
+        print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     

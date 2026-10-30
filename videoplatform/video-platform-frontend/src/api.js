@@ -1,10 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api/',
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: process.env.REACT_APP_API_URL || '/api/',
 });
 
 // Добавляем токен авторизации к каждому запросу
@@ -23,7 +20,8 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const isLogin = error.config?.url?.includes('token/');
+    if (error.response?.status === 401 && !isLogin && localStorage.getItem('access_token')) {
       localStorage.removeItem('access_token');
       window.location.href = '/login';
     }

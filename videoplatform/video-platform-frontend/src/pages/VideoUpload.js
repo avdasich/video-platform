@@ -21,11 +21,7 @@ const VideoUpload = () => {
     formData.append('file', file);
 
     try {
-      await api.post('videos/upload/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      await api.post('videos/upload/', formData);
       navigate('/');
     } catch (error) {
       setError(error.response?.data?.message || 'Ошибка загрузки');

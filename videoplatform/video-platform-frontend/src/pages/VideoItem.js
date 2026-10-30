@@ -34,7 +34,7 @@ const VideoItem = ({ video, onDelete }) => {
     }
 
     try {
-      await api.patch(`videos/${video.id}/`, formData, {
+      await api.patch(`videos/${video.id}/edit/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

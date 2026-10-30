@@ -1,0 +1,20 @@
+# Local Django settings and uploaded content
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.sqlite3
+videoplatform/media/
+
+# Frontend
+node_modules/
+build/
+dist/
+
+# Editor / OS
+.idea/
+.vscode/
+.DS_Store

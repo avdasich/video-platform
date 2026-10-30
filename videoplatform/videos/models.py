@@ -3,16 +3,15 @@ from django.conf import settings
 import os
 from django.core.files.storage import FileSystemStorage
 
-# Кастомное хранилище для контроля разрешений
 class OverwriteStorage(FileSystemStorage):
-    def get_available_name(self, name, max_length=None):
-        # Удаляем существующий файл с тем же именем
-        if self.exists(name):
-            self.delete(name)
-        return name
+    """Оставлено для совместимости с миграциями.
+
+    Стандартный FileSystemStorage добавляет суффикс при совпадении имён,
+    поэтому загрузка одного видео не удаляет файл другого.
+    """
 
 def video_upload_path(instance, filename):
-    # Путь для сохранения: media/videos/user_<id>/<filename>
+
     return os.path.join('videos', f'user_{instance.user.id}', filename)
 
 class Video(models.Model):
@@ -61,19 +60,19 @@ class Video(models.Model):
         return f'/videos/{self.id}/'
 
     def save(self, *args, **kwargs):
-        # Логирование пути при сохранении
+
         if self.file:
             print(f"Файл будет сохранен в: {self.file.path}")
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        # Удаляем файл при удалении объекта
-        if self.file:
-            storage, path = self.file.storage, self.file.path
-            super().delete(*args, **kwargs)
-            storage.delete(path)
-        else:
-            super().delete(*args, **kwargs)
+
+        file_name = self.file.name if self.file else None
+        storage = self.file.storage if file_name else None
+        result = super().delete(*args, **kwargs)
+        if storage and file_name:
+            storage.delete(file_name)
+        return result
 
 
 class Comment(models.Model):
@@ -118,7 +117,7 @@ class Rating(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ['video', 'user']  # Один пользователь - одна оценка
+        unique_together = ['video', 'user']
         ordering = ['-created_at']
 
     def __str__(self):

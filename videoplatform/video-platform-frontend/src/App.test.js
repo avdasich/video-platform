@@ -1,8 +1,20 @@
+import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+import api from './api';
 import App from './App';
 
-test('renders learn react link', () => {
+jest.mock('./api', () => ({
+  __esModule: true,
+  default: { get: jest.fn() }
+}));
+
+test('shows the video platform navigation', async () => {
+  api.get.mockResolvedValue({ data: [] });
+
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+
+  expect(screen.getByText('YA BRO')).toBeInTheDocument();
+  expect(screen.getByText('Вход')).toBeInTheDocument();
+  expect(await screen.findByText('Выберите видео из списка')).toBeInTheDocument();
+  expect(api.get).toHaveBeenCalledWith('videos/');
 });
